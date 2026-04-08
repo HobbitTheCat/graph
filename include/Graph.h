@@ -1,30 +1,20 @@
 #ifndef PROJECT_GRAPH_GRAPH_H
 #define PROJECT_GRAPH_GRAPH_H
 
-#include <set>
+#include <vector>
 
-#include "CSR.h"
+struct Graph {
+    int num_vertices;
+    int num_edges;
 
-class Graph {
-private:
-    CSR csr;
+    std::vector<int> offsets;
+    std::vector<int> edges;
+    std::vector<float> weights;
 
-    std::vector<int> colors;
-    std::vector<int> sat_deg;
-
-    std::vector<std::set<int>> neighbor_colors;
-    std::vector<std::vector<int>> buckets;
-
-    std::vector<int> last_seen_at;
-    int max_sat = 0;
-
-    int find_min_available_color(int v);
-public:
-    Graph(CSR&& source_csr);
-
-    void run_dsatur();
-
-
+    Graph(int v, int e) : num_vertices(v), num_edges(e) {
+        offsets.resize(v + 1, 0);
+        edges.resize(e);
+    }
 };
 
 #endif //PROJECT_GRAPH_GRAPH_H
