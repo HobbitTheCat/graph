@@ -97,6 +97,7 @@ __global__ void repulsionKernel(float* posX, float* posY, float* posZ,
                     float dist = sqrtf(distSq);
 
                     float force = (k * k) / dist;
+                    if (force > 500.0f) force = 500.0f;
 
                     fx += (dx / dist) * force;
                     fy += (dy / dist) * force;

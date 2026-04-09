@@ -11,6 +11,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-void runVisualisation(const Graph& hostGraph, DeviceGraph& deviceGraph, GLFWwindow* window);
+void runVisualisation(const Graph& hostGraph);
 
 #endif //PROJECT_GRAPH_VISUALISATION_H

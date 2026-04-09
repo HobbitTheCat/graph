@@ -1,3 +1,9 @@
 .idea/
+bib/
 
+test.cu
+test_cuda_gl
 build/
+
+*.gz
+graph/

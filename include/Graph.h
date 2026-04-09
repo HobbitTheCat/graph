@@ -7,7 +7,9 @@ struct Graph {
     int num_vertices;
     int num_edges;
 
+
     std::vector<int> offsets;
+
     std::vector<int> edges;
     std::vector<float> weights;
 

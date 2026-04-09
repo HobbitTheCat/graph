@@ -9,7 +9,80 @@
 #include "visual/visualisation.h"
 #include "visual/force_layout.h"
 
-void runVisualisation(const Graph& hostGraph, DeviceGraph& deviceGraph, GLFWwindow* window) {
+struct CameraControls {
+    float windowWidth = 1280.0f;
+    float windowHeight = 720.0f;
+    float lastX = 640.0f;
+    float lastY = 360.0f;
+    float yaw = -90.0f;
+    float pitch = 0.0f;
+    float fov = 45.0f;
+    float cameraDist = 500.0f;
+    bool firstMouse = true;
+};
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    auto* state = reinterpret_cast<CameraControls*>(glfwGetWindowUserPointer(window));
+    if (state) {
+        state->windowWidth = (float)width;
+        state->windowHeight = (float)height;
+        glViewport(0, 0, width, height);
+    }
+}
+
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
+    auto* state = reinterpret_cast<CameraControls*>(glfwGetWindowUserPointer(window));
+    if (!state) return;
+
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+
+    if (state->firstMouse) {
+        state->lastX = xpos;
+        state->lastY = ypos;
+        state->firstMouse = false;
+    }
+
+    float xoffset = xpos - state->lastX;
+    float yoffset = state->lastY - ypos;
+    state->lastX = xpos;
+    state->lastY = ypos;
+
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+        float sensitivity = 0.1f;
+        state->yaw += xoffset * sensitivity;
+        state->pitch += yoffset * sensitivity;
+
+        if (state->pitch > 89.0f) state->pitch = 89.0f;
+        if (state->pitch < -89.0f) state->pitch = -89.0f;
+    }
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    auto* state = reinterpret_cast<CameraControls*>(glfwGetWindowUserPointer(window));
+    if (state) {
+        state->cameraDist -= (float)yoffset * 20.0f;
+        if (state->cameraDist < 10.0f) state->cameraDist = 10.0f;
+    }
+}
+
+void runVisualisation(const Graph& hostGraph) {
+    if (!glfwInit()) return;
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Visualisation", NULL, NULL);
+
+    CameraControls cam;
+    glfwSetWindowUserPointer(window, &cam);
+
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+
+    if (!window) { glfwTerminate(); return; }
+    glfwMakeContextCurrent(window);
+    glewInit();
+
+    DeviceGraph deviceGraph = setupDeviceGraph(hostGraph);
+
 
     Shader shader("vertex.glsl", "fragment.glsl");
 
@@ -42,11 +115,9 @@ void runVisualisation(const Graph& hostGraph, DeviceGraph& deviceGraph, GLFWwind
         return;
     }
 
-    float rotation = 0.0f;
-
     cudaDeviceSynchronize();
     while (!glfwWindowShouldClose(window)) {
-        step(deviceGraph, 40.0f, 0.01f, 0.9f); //physics проверить что 40 достаточно
+        step(deviceGraph, 40.0f, 0.0002f, 0.9f); //physics проверить что 40 достаточно
 
         float* d_vboPtr;
         size_t size;
@@ -60,14 +131,16 @@ void runVisualisation(const Graph& hostGraph, DeviceGraph& deviceGraph, GLFWwind
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
-
         shader.use();
-        glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 5000.0f);
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -500));
 
-        rotation += 0.001f;
+        glm::mat4 projection = glm::perspective(glm::radians(cam.fov),
+                                               cam.windowWidth / cam.windowHeight,
+                                               0.1f, 50000.0f);
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -cam.cameraDist));
+        view = glm::rotate(view, glm::radians(cam.pitch), glm::vec3(-1.0f, 0.0f, 0.0f));
+        view = glm::rotate(view, glm::radians(cam.yaw), glm::vec3(0.0f, 1.0f, 0.0f));
 
-        view = glm::rotate(view, rotation, glm::vec3(0,1,0));
         shader.setMat4("mvp", projection * view);
 
         glBindVertexArray(vao);
@@ -84,5 +157,8 @@ void runVisualisation(const Graph& hostGraph, DeviceGraph& deviceGraph, GLFWwind
     }
 
     cudaGraphicsUnregisterResource(cudaVboRes);
+
+    freeDeviceGraph(deviceGraph);
     glfwDestroyWindow(window);
+    glfwTerminate();
 }
