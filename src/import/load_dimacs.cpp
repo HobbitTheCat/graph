@@ -7,6 +7,9 @@
 #include <sstream>
 #include <algorithm>
 #include <map>
+#include <set>
+
+#include "../../include/Graph.h"
 
 Graph load_dimacs(const std::string& filePath) {
     std::ifstream file(filePath);
@@ -41,6 +44,8 @@ Graph load_dimacs(const std::string& filePath) {
     for (int i = 0; i <= v; ++i) actual_e += adj[i].size();
 
     Graph g(v,actual_e);
+    g.edge_weights.assign(actual_e, 1);
+    g.vertex_weights.assign(v, 1);
 
     int current_offset = 0;
     for (int i = 1; i <= v; i++) {
@@ -56,14 +61,15 @@ Graph load_dimacs(const std::string& filePath) {
     return g;
 }
 
-
 Graph load_txt(const std::string& filePath) {
     std::ifstream file(filePath);
     if (!file.is_open()) {throw std::runtime_error("Could not open file");}
 
+
     std::string line;
     int nodes_count = 0, edges_count = 0;
     std::vector<std::pair<int, int>> temp_edges;
+
 
     while (std::getline(file, line)) {
         if (line.empty()) continue;
@@ -92,6 +98,8 @@ Graph load_txt(const std::string& filePath) {
     int V = id_map.size();
     int E = temp_edges.size();
     Graph g(V, E);
+    g.edge_weights.assign(E, 1);
+    g.vertex_weights.assign(V, 1);
 
     std::vector<std::vector<int>> adj(V);
     for (const auto& edge : temp_edges) {
@@ -107,6 +115,69 @@ Graph load_txt(const std::string& filePath) {
             g.edges[current_offset++] = neighbor;
         }
     }
+
     g.offsets[V] = current_offset;
     return g;
+
 }
+
+
+// Graph load_txt(const std::string& filePath) {
+//     std::ifstream file(filePath);
+//     if (!file.is_open()) {throw std::runtime_error("Could not open file");}
+//
+//     std::string line;
+//     std::set<std::pair<int, int>> unique_edges;
+//     std::set<int> unique_nodes;
+//
+//     while (std::getline(file, line)) {
+//         if (line.empty() || line[0] == '#') continue;
+//
+//         std::istringstream stream(line);
+//         int u_raw, v_raw;
+//         if (stream >> u_raw >> v_raw) {
+//             if (u_raw == v_raw) continue;
+//
+//             int first = std::min(u_raw, v_raw);
+//             int second = std::max(u_raw, v_raw);
+//
+//             unique_edges.insert({first, second});
+//             unique_nodes.insert(u_raw);
+//             unique_nodes.insert(v_raw);
+//         }
+//     }
+//
+//     std::map<int, int> id_map;
+//     int current_id = 0;
+//     for (int node : unique_nodes) {
+//         id_map[node] = current_id++;
+//     }
+//
+//     int V = id_map.size();
+//     int E_directed = unique_edges.size() * 2;
+//
+//     Graph g (V, E_directed);
+//
+//     g.vertex_weights.assign(V, 1);
+//     g.edge_weights.assign(E_directed, 1);
+//
+//     std::vector<std::vector<int>> adj(V);
+//     for (const auto& edge : unique_edges) {
+//         int u = id_map[edge.first];
+//         int v = id_map[edge.second];
+//         adj[u].push_back(v);
+//         adj[v].push_back(u);
+//     }
+//
+//     int current_offset = 0;
+//     for (int i = 0; i < V; i++) {
+//         g.offsets[i] = current_offset;
+//         std::sort(adj[i].begin(), adj[i].end());
+//         for (int neighbor : adj[i]) {
+//             g.edges[current_offset] = neighbor;
+//         }
+//     }
+//     g.offsets[V] = current_offset;
+//
+//     return g;
+// }
