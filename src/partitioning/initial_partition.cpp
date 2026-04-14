@@ -13,7 +13,7 @@ void initial_partition(const Graph& G, std::vector<int>& part) {
 
     if (n == 0) return; // TODO проверить что это будет работать всегда
 
-    // выбираем случайную вершину
+    // выбираем случайную вершину TODO тут явно нужно выбирать не случайную вершину
     std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<int> dist(0, n-1);
     int start_node = dist(rng);

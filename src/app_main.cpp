@@ -43,8 +43,12 @@ int main() {
     // std::cout << "Offsets: ";
     // for (int v : cmap) std::cout << v << " ";
     // std::cout << std::endl;
-    multilevel_partition(graph, 2);
 
+    // multilevel_partition(graph, 2);
+
+    std::vector<int> part;
+    initial_partition(graph, part);
+    runVisualisation(graph, part);
 
     return 0;
 }

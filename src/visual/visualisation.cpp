@@ -66,7 +66,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     }
 }
 
-void runVisualisation(const Graph& hostGraph) {
+void runVisualisation(const Graph& hostGraph, std::vector<int>& colors) {
     if (!glfwInit()) return;
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Visualisation", NULL, NULL);
 
@@ -86,10 +86,11 @@ void runVisualisation(const Graph& hostGraph) {
 
     Shader shader("vertex.glsl", "fragment.glsl");
 
-    GLuint vao, vbo, ebo;
+    GLuint vao, vbo, ebo, colorVbo;
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
     glGenBuffers(1, &ebo);
+    glGenBuffers(1, &colorVbo);
 
     glBindVertexArray(vao);
 
@@ -97,6 +98,11 @@ void runVisualisation(const Graph& hostGraph) {
     glBufferData(GL_ARRAY_BUFFER, hostGraph.num_vertices * 3 * sizeof(float), NULL, GL_DYNAMIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
+    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(int), colors.data(), GL_STATIC_DRAW);
+    glVertexAttribIPointer(1, 1, GL_INT, 0, (void*)0); // Используем I для int!
+    glEnableVertexAttribArray(1);
 
     std::vector<unsigned int> indices;
     for (int i = 0; i < hostGraph.num_vertices; i++) {
@@ -145,11 +151,13 @@ void runVisualisation(const Graph& hostGraph) {
 
         glBindVertexArray(vao);
 
+        shader.setBool("useVertexColor", false);
         shader.setVec3("color", glm::vec3(0.3f, 0.3f, 0.3f));
         glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_INT, 0);
 
+        shader.setBool("useVertexColor", true);
         glPointSize(5.0f);
-        shader.setVec3("color", glm::vec3(0.0f, 0.7f, 1.0f));
+        // shader.setVec3("color", glm::vec3(0.0f, 0.7f, 1.0f));
         glDrawArrays(GL_POINTS, 0, deviceGraph.num_vertices);
 
         glfwSwapBuffers(window);

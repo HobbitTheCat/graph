@@ -11,6 +11,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-void runVisualisation(const Graph& hostGraph);
+void runVisualisation(const Graph& hostGraph, std::vector<int>& colors);
 
 #endif //PROJECT_GRAPH_VISUALISATION_H

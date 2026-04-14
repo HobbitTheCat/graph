@@ -31,5 +31,8 @@ void multilevel_partition(Graph& G, int k) {
         current_G = &hierarchy.back().graph;
     }
 
-    
+    std::vector<int> part;
+    initial_partition(hierarchy[hierarchy.size() - 1].graph, part);
+
+    runVisualisation(hierarchy[hierarchy.size() - 1].graph, part);
 }
