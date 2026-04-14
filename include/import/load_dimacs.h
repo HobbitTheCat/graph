@@ -13,4 +13,6 @@
 Graph load_dimacs(const std::string& filePath);
 Graph load_txt(const std::string& filePath);
 
+void clean_disconnected_parts(const Graph& G, Graph& clean_G);
+
 #endif //PROJECT_GRAPH_LOAD_DIMACS_H

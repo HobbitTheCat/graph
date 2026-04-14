@@ -1,8 +1,10 @@
 #include "partitioning.h"
-#include "cmath"
+
+#include <cmath>
+#include <vector>
 #include <algorithm>
 
-static int bisection(const Graph& G, VertexSet& V, int first, int last) {
+static int bisection(const Graph& G, std::vector<int> partition_map, int first, int last) {
     return first + (last - first) / 2;
 }
 
