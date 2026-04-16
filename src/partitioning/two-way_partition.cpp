@@ -3,20 +3,27 @@
 
 #include <vector>
 #include <queue>
-#include <set>
+#include <climits>
 #include <algorithm>
 #include <random>
 
-void initial_partition(const Graph& G, std::vector<int>& part) {
+void two_way_partition(const Graph& G, std::vector<int>& part) {
     int n = G.num_vertices;
     part.assign(n, -1);
 
     if (n == 0) return; // TODO проверить что это будет работать всегда
 
     // выбираем случайную вершину TODO тут явно нужно выбирать не случайную вершину
-    std::mt19937 rng(std::random_device{}());
-    std::uniform_int_distribution<int> dist(0, n-1);
-    int start_node = dist(rng);
+    // std::mt19937 rng(std::random_device{}());
+    // std::uniform_int_distribution<int> dist(0, n-1);
+    // int start_node = dist(rng);
+    int start_node = 0;
+    int min_deg = INT_MAX;
+    for (int i = 0; i < n; i++) {
+        int deg = G.offsets[i + 1] - G.offsets[i];
+        if (deg < min_deg) {min_deg = deg; start_node = i;}
+        if (min_deg == 1) break;
+    }
 
     std::priority_queue<std::pair<int, int>> frontier;  // создаем массив граничащих эллементов pair<приоритет, индекс>
     std::vector<int> gains(n, 0);

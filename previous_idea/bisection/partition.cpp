@@ -13,7 +13,7 @@ static void iterate(const Graph& G, VertexSet& V, int first, int last, int k_pri
     // first: откуда начинать, last: до куда идти, k_prime: сколько должно быть частей, num: текущий номер части, Pk: сюда будем записывать
 
     if (k_prime > 1) {
-        int k1 = std::floor(k_prime / 2);       // Определяем где половина
+        int k1 = std::floor(k_prime / 2.0);       // Определяем где половина
 
         int mid = bisection(G, V, first, last); // Разбиваем текущий участок графа на два участка
 

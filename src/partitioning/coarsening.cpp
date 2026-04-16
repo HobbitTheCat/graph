@@ -11,7 +11,12 @@ void find_heavy_edge_matching(const Graph& G, std::vector<int>& cmap, int& nextV
     std::vector<int> p(n);                              // создаем массив длинной сколичество вершин (permutation)
     std::iota(p.begin(), p.end(), 0);    // заполняем его индексами вершин от 0 до n-1
 
-    std::ranges::shuffle(p, std::mt19937(std::random_device()()));  // перемешиваем для случайного порядка обхода
+    // std::ranges::shuffle(p, std::mt19937(std::random_device()()));  // перемешиваем для случайного порядка обхода
+    std::sort(p.begin(), p.end(), [&](int a, int b) {
+        int degA = G.offsets[a+1] - G.offsets[a];
+        int degB = G.offsets[b+1] - G.offsets[b];
+        return degA < degB;
+    });
 
     nextVertexIdx = 0;
     cmap.assign(n, -1);                  // выделяем место под мапу и заполняем -1 для начала

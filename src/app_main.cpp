@@ -4,6 +4,7 @@
 #include <vector>
 #include "Graph.h"
 #include "../include/partitioning/coarsening.h"
+#include "../include/partitioning/multilevel_partition.h"
 #include "visual/visualisation.h"
 #include "import/load_dimacs.h"
 
@@ -33,10 +34,6 @@ int main() {
     // hGraph.edge_weights.assign(hGraph.edges.size(), 1);
     // hGraph.vertex_weights.assign(V, 3);
 
-    // CoarseLevel level_1;
-    // coarse_step(hGraph, level_1);
-    // CoarseLevel level_2;
-    // coarse_step(level_1.graph, level_2);
 
     // std::cout << "Vertices: " << level_2.graph.num_vertices << ", Edges: " << level_2.graph.edges.size() << std::endl;
 
@@ -44,11 +41,8 @@ int main() {
     // for (int v : cmap) std::cout << v << " ";
     // std::cout << std::endl;
 
-    // multilevel_partition(graph, 2);
-
-    std::vector<int> part;
-    initial_partition(graph, part);
-    runVisualisation(graph, part);
+    std::vector<int> parts;
+    multilevel_partition(graph, parts);
 
     return 0;
 }
