@@ -66,6 +66,12 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     }
 }
 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
+}
+
 void runVisualisation(const Graph& hostGraph, std::vector<int>& colors) {
     if (!glfwInit()) return;
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Visualisation", NULL, NULL);
@@ -76,6 +82,7 @@ void runVisualisation(const Graph& hostGraph, std::vector<int>& colors) {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
+    glfwSetKeyCallback(window, key_callback);
 
     if (!window) { glfwTerminate(); return; }
     glfwMakeContextCurrent(window);

@@ -6,6 +6,7 @@
 let
   # Список необходимых библиотек для LD_LIBRARY_PATH
   gpuLibs = with pkgs; [
+    metis
     cudaPackages.cudatoolkit
     linuxPackages.nvidia_x11 # Важно для работы с драйвером напрямую
     libGL
@@ -23,6 +24,8 @@ pkgs.mkShell {
     cmake
 
     gdb
+
+    metis
 
     # CUDA
     cudaPackages.cudatoolkit

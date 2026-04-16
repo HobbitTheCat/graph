@@ -6,7 +6,7 @@ INCLUDES := -Iinclude -I/usr/local/cuda/include -I.
 
 NVCCFLAGS := -std=c++20 -O3 --compiler-options '-fPIC'
 
-LIBS := -lGLEW -lGL -lglfw -lcudart -L/usr/local/cuda/lib64
+LIBS := -lGLEW -lGL -lglfw -lcudart -L/usr/local/cuda/lib64 -lmetis
 
 SRC_DIR := src
 BUILD_DIR := build

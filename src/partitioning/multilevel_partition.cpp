@@ -60,6 +60,5 @@ void multilevel_partition(Graph& G, std::vector<int>& partition) {
         partition = std::move(next_partition);
     }
 
-
-    runVisualisation(G, partition);
+    bridge_islands(G, partition, 2);
 }

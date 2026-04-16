@@ -2,6 +2,7 @@
 #define PROJECT_GRAPH_GRAPH_H
 
 #include <vector>
+#include <cstdint>
 #include <iostream>
 
 struct Graph {
@@ -10,7 +11,6 @@ struct Graph {
 
 
     std::vector<int> offsets;
-
     std::vector<int> edges;
 
     std::vector<int> edge_weights;
@@ -30,5 +30,7 @@ struct Graph {
         std::cout << std::endl;
     }
 };
+
+void split_into_two_graphs(const Graph& initial, const std::vector<int>& parts, Graph& g0, Graph& g1);
 
 #endif //PROJECT_GRAPH_GRAPH_H

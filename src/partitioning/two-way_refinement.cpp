@@ -239,7 +239,7 @@ static int fm_pass (const Graph& G, std::vector<int>& part, double balance_facto
 }
 
 void two_way_refinement(const Graph& G, std::vector<int>& part, int max_passes) {
-    const double balance_factor = 0.2;
+    const double balance_factor = 0.1;
 
     for (int pass = 0; pass < max_passes || max_passes < 0; pass++) {
         int improvement = fm_pass(G, part, balance_factor);

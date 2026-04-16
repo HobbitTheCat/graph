@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdio>
+#include <metis.h>
 
 #include <vector>
 #include "Graph.h"
@@ -10,6 +11,42 @@
 
 #include "partitioning/coarsening.h"
 #include "partitioning/multilevel_partition.h"
+
+void metis_partition(Graph& g, int num_parts, std::vector<int>& part) {
+    part.assign(g.num_vertices, 0);
+
+    idx_t nvtxs = static_cast<idx_t>(g.num_vertices);
+    idx_t ncon = 1;
+    idx_t nparts = static_cast<idx_t>(num_parts);
+    idx_t objval;
+
+    idx_t options[METIS_NOPTIONS];
+    METIS_SetDefaultOptions(options);
+
+    options[METIS_OPTION_CONTIG] = 1;
+    options[METIS_OPTION_UFACTOR] = 100;
+    options[METIS_OPTION_NITER] = 10;
+
+    int status = METIS_PartGraphKway(
+        &nvtxs,
+        &ncon,
+        reinterpret_cast<idx_t*>(g.offsets.data()),
+        reinterpret_cast<idx_t*>(g.edges.data()),
+        g.vertex_weights.empty() ? NULL : reinterpret_cast<idx_t*>(g.vertex_weights.data()),
+        NULL,
+        g.edge_weights.empty() ? NULL : reinterpret_cast<idx_t*>(g.edge_weights.data()),
+        &nparts,
+        NULL,    // tpwgts: NULL для равного распределения между частями
+        NULL,    // ubvec: NULL, если используем UFACTOR в options
+        options, // Передаем наши настроенные опции
+        &objval,
+        reinterpret_cast<idx_t*>(part.data())
+    );
+
+    if (status != METIS_OK) {
+        throw std::runtime_error("METIS partition failed");
+    }
+}
 
 int main() {
     setenv("__NV_PRIME_RENDER_OFFLOAD", "1", 1);
@@ -42,7 +79,12 @@ int main() {
     // std::cout << std::endl;
 
     std::vector<int> parts;
-    multilevel_partition(graph, parts);
+    std::vector<int> parts_2;
+
+    // multilevel_partition(graph, parts);
+    metis_partition(graph, 2, parts_2);
+
+    runVisualisation(graph, parts_2);
 
     return 0;
 }
