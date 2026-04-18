@@ -108,7 +108,8 @@ The project uses a custom `Makefile` to handle both C++ and CUDA source files.
 2. **Compile the project:**
    ```bash
       make
-    ``` This will create a `build/` directory containing the compiled object files and executables.
+    ```
+   This will create a `build/` directory containing the compiled object files and executables.
 3. **Run the application:**
    
    The build system generates separate executables for different application entry points (files starting with `app_` in `src/`). 
