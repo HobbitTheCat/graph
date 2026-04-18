@@ -87,6 +87,40 @@ METIS | Cut weight: **1745** | Part weights: 254 / 305
 
 ---
 
+## 🛠 Installation & Build
+
+### Prerequisites
+To build this project, ensure you have the following dependencies installed:
+
+* **CUDA Toolkit**: Required for GPU acceleration (`nvcc`, `cudart`).
+* **Metis Library**: Used for performance benchmarking (`-lmetis`).
+* **Graphics**: `GLEW`, `GLFW`, and `OpenGL` for real-time visualization.
+* **Compiler**: A C++ compiler supporting **C++20** (e.g., `g++`).
+
+### Build Instructions
+The project uses a custom `Makefile` to handle both C++ and CUDA source files.
+
+1. **Clone the repository:**
+   ```bash
+     git clone [https://github.com/HobbitTheCat/graph](https://github.com/HobbitTheCat/graph)
+     cd graph
+     ```
+2. **Compile the project:**
+   ```bash
+      make
+    ``` This will create a `build/` directory containing the compiled object files and executables.
+3. **Run the application:**
+   
+   The build system generates separate executables for different application entry points (files starting with `app_` in `src/`). 
+  ```bash
+  /build/app_main  # Replace with the specific app name
+  ``` 
+4. **Clean:**
+To remove all build artifacts:
+```bash
+make clean
+```
+---
 
 ### Challenges & Future Work
 - **Coarsening Limits**: Addressing the formation of "super-nodes" during the contraction phase that can slow down kernel reduction.
