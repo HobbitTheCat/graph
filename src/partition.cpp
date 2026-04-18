@@ -3,7 +3,7 @@
 void split_into_two_graphs(const Graph& initial, const std::vector<int>& parts, Graph& g0, Graph& g1) {
     int n = initial.num_vertices;
 
-    // 1. Создаем карты отображения: global_id -> local_id
+    // Creating mapping tables: global_id -> local_id
     std::vector<int> global_to_local(n, -1);
     int n0 = 0, n1 = 0;
 
@@ -12,7 +12,7 @@ void split_into_two_graphs(const Graph& initial, const std::vector<int>& parts, 
         else global_to_local[i] = n1++;
     }
 
-    // Инициализируем графы
+    // initialize the graphs
     g0.num_vertices = n0;
     g0.offsets.assign(n0 + 1, 0);
     g0.vertex_weights.reserve(n0);
@@ -37,14 +37,14 @@ void split_into_two_graphs(const Graph& initial, const std::vector<int>& parts, 
                 int weight = initial.edge_weights.empty() ? 1 : initial.edge_weights[i];
 
                 if (parts[neighbor] == target_part) {
-                    // Внутреннее ребро
+                    // Internal edge
                     new_edges.push_back(global_to_local[neighbor]);
                     new_edge_weights.push_back(weight);
                 } else {
-                    // Граничное ребро (ведёт в другую часть)
-                    // Здесь ты можешь решить: либо добавлять виртуальную вершину,
-                    // либо просто игнорировать ребро для полной независимости.
-                    // Если используем is_virtual_vertex, логика усложняется (нужно добавлять саму вершину).
+                    // Boundary edge (leads to another part)
+                    // Here you can decide: either add a virtual vertex,
+                    // or simply ignore the edge for complete independence.
+                    // If we use `is_virtual_vertex`, the logic becomes more complicated (we need to add the vertex itself).
                 }
             }
             current_local_v++;

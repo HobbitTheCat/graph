@@ -97,15 +97,15 @@ void KWayFM::refine(int max_iterations) {
             moved = 1;
         }
         if (moved == 0) break;
-        // Здесь должна быть логика отката (Rollback) к лучшему состоянию итерации
+        // There should be a rollback logic here to revert to a better state of the iteration
     }
 }
 
 void KWayFM::remove_node_from_all_buckets(int v) {
     for (auto& [to_part, it] : this->node_iters[v]) {
         int from_part = partition[v];
-        // Нам нужно знать gain, чтобы найти ведро.
-        // В реальной реализации лучше хранить gain внутри итератора или структуры.
+        // We need to know the gain to find the bucket.
+        // In a real-world implementation, it's better to store the gain inside an iterator or a structure.
     }
     node_iters[v].clear();
 }

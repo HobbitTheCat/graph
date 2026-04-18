@@ -2,7 +2,6 @@
 #define PROJECT_GRAPH_GRAPH_H
 
 #include <vector>
-#include <cstdint>
 #include <iostream>
 
 struct Graph {

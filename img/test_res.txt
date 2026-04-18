@@ -1,0 +1,67 @@
+CA-GrQc.txt (Collaboration network of Arxiv General Relativity)
+http://snap.stanford.edu/data/ca-GrQc.html
+
+Vertices: 5242, Edges: 57936
+Level 1: Vertices = 2401, Edges = 14790
+Level 2: Vertices = 1360, Edges = 8946
+Level 3: Vertices = 740, Edges = 5726
+Level 4: Vertices = 388, Edges = 4044
+Level 5: Vertices = 203, Edges = 2938
+Level 6: Vertices = 105, Edges = 2152
+Level 7: Vertices = 54, Edges = 1334
+MY:
+Cut weight: 1000, Part 1 weight: 2260, Part 2 weight: 1898
+METIS:
+Cut weight: 1002, Part 1 weight: 2079, Part 2 weight: 2079
+
+
+ca-HepPh.txt (High Energy Physics - Phenomenology collaboration network)
+http://snap.stanford.edu/data/ca-HepPh.html
+
+Vertices: 12008, Edges: 473956
+Level 1: Vertices = 6288, Edges = 150902
+Level 2: Vertices = 3334, Edges = 101212
+Level 3: Vertices = 1717, Edges = 68268
+Level 4: Vertices = 872, Edges = 45864
+Level 5: Vertices = 443, Edges = 31408
+Level 6: Vertices = 228, Edges = 19036
+Level 7: Vertices = 120, Edges = 8942
+Level 8: Vertices = 65, Edges = 2860
+MY:
+Cut weight: 9396, Part 1 weight: 6112, Part 2 weight: 5092
+METIS:
+Cut weight: 11178, Part 1 weight: 5217, Part 2 weight: 5987
+
+
+p2p-Gnutella30.txt (Gnutella peer-to-peer network, August 30 2002)
+http://snap.stanford.edu/data/p2p-Gnutella30.html
+
+Vertices: 36682, Edges: 176656
+Level 1: Vertices = 27455, Edges = 157954
+Level 2: Vertices = 18982, Edges = 139822
+Level 3: Vertices = 11754, Edges = 123682
+Level 4: Vertices = 6913, Edges = 112390
+Level 5: Vertices = 3917, Edges = 104340
+Level 6: Vertices = 2139, Edges = 97594
+Level 7: Vertices = 1143, Edges = 89378
+Level 8: Vertices = 606, Edges = 74776
+Level 9: Vertices = 326, Edges = 47918
+Level 10: Vertices = 181, Edges = 18424
+Level 11: Vertices = 105, Edges = 5128
+Level 12: Vertices = 65, Edges = 1482
+MY:
+Cut weight: 14396, Part 1 weight: 16498, Part 2 weight: 20148
+METIS
+Cut weight: 15732, Part 1 weight: 18323, Part 2 weight: 18323
+
+jean.col 
+https://mat.tepper.cmu.edu/COLOR/instances.html
+Vertices: 621, Edges: 27938
+Level 1: Vertices = 334, Edges = 16396
+Level 2: Vertices = 204, Edges = 9678
+Level 3: Vertices = 113, Edges = 5058
+Level 4: Vertices = 57, Edges = 2122
+MY:
+Cut weight: 1636, Part 1 weight: 306, Part 2 weight: 253
+METIS:
+Cut weight: 1745, Part 1 weight: 254, Part 2 weight: 305

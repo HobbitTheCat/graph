@@ -1,20 +1,19 @@
 { pkgs ? import <nixpkgs> {
-    config.allowUnfree = true; # CUDA проприетарна, это разрешение обязательно
+    config.allowUnfree = true;
   }
 }:
 
 let
-  # Список необходимых библиотек для LD_LIBRARY_PATH
   gpuLibs = with pkgs; [
     metis
     cudaPackages.cudatoolkit
-    linuxPackages.nvidia_x11 # Важно для работы с драйвером напрямую
+    linuxPackages.nvidia_x11
     libGL
     libGLU
     freeglut
     glew
     glfw
-    stdenv.cc.cc.lib # Стандартные библиотеки C++
+    stdenv.cc.cc.lib
   ];
 in
 pkgs.mkShell {
@@ -47,14 +46,11 @@ pkgs.mkShell {
   ];
 
   shellHook = ''
-    # Путь к заголовочным файлам CUDA (для nvcc и компиляторов)
     export CUDA_PATH=${pkgs.cudaPackages.cudatoolkit}
 
-    # Чтобы компилятор нашел cuda_runtime.h и cuda_gl_interop.h
     export CPATH="${pkgs.cudaPackages.cudatoolkit}/include:$CPATH"
     export LIBRARY_PATH="${pkgs.cudaPackages.cudatoolkit}/lib:$LIBRARY_PATH"
 
-    # Динамическая линковка во время выполнения
     export LD_LIBRARY_PATH="${pkgs.lib.makeLibraryPath gpuLibs}:$LD_LIBRARY_PATH"
 
     echo "CUDA + OpenGL Environment Loaded!"

@@ -20,7 +20,7 @@ PartitionResult gggp_bisect_weighted(const Graph& graph,
     std::unordered_map<int, bool> isInSubset;
     for (int v_idx : current_indices) isInSubset[v_idx] = true;
 
-    // Поиск стартовой вершины (seed) — берем вершину с мин. степенью
+    // Finding a seed vertex — we choose the vertex with the minimum degree
     int seed = current_indices[0];
     int min_deg = 1e9;
     for (int v_idx : current_indices) {
@@ -56,7 +56,7 @@ PartitionResult gggp_bisect_weighted(const Graph& graph,
             }
         }
 
-        // Обработка несвязных компонент
+        // Processing of disconnected components
         if (pq.empty() && current_weight < target_weight) {
             for (int v_idx : current_indices) {
                 if (!visited[v_idx]) {
@@ -68,7 +68,7 @@ PartitionResult gggp_bisect_weighted(const Graph& graph,
         }
     }
 
-    // Формируем partB из остатков
+    // Creating partB from the remaining
     std::vector<int> partB;
     std::vector<bool> inA(graph.num_vertices, false);
     for (int v : partA) inA[v] = true;

@@ -4,16 +4,15 @@
 #include <vector>
 #include <queue>
 #include <climits>
-#include <algorithm>
 #include <random>
 
 void two_way_partition(const Graph& G, std::vector<int>& part) {
     int n = G.num_vertices;
     part.assign(n, -1);
 
-    if (n == 0) return; // TODO проверить что это будет работать всегда
+    if (n == 0) return; // TODO: Check that this will always work
 
-    // выбираем случайную вершину TODO тут явно нужно выбирать не случайную вершину
+    // select a random vertex
     // std::mt19937 rng(std::random_device{}());
     // std::uniform_int_distribution<int> dist(0, n-1);
     // int start_node = dist(rng);
@@ -25,41 +24,41 @@ void two_way_partition(const Graph& G, std::vector<int>& part) {
         if (min_deg == 1) break;
     }
 
-    std::priority_queue<std::pair<int, int>> frontier;  // создаем массив граничащих эллементов pair<приоритет, индекс>
+    std::priority_queue<std::pair<int, int>> frontier;  // Create an array of adjacent elements of type `pair<priority, index>`
     std::vector<int> gains(n, 0);
 
-    part[start_node] = 0;                               // добавляем начальную вершину в первую часть
-    int current_weight_E = G.vertex_weights[start_node];// инициируем вес первой части равным весу единственной вершины в нем
-    int total_weight_V = 0;                             // инициируем вес графа
-    for (double w : G.vertex_weights) total_weight_V += w;  // получаем полный вес графф
+    part[start_node] = 0;                                   // add the starting vertex to the first part
+    int current_weight_E = G.vertex_weights[start_node];    // initialize the weight of the first part to be equal to the weight of its only vertex
+    int total_weight_V = 0;                                 // initialize the graph's weight
+    for (double w : G.vertex_weights) total_weight_V += w;  // obtain the total weight of the graph
 
-    for (int i = G.offsets[start_node]; i < G.offsets[start_node+1]; i++) {     // для всех соседей start_node
-        int neighbor_id = G.edges[i];                   // берем соседа
-        if (neighbor_id != start_node) {                // проверяем петлю
-            gains[neighbor_id] += G.edge_weights[i];    // выигрыш составляет вес связи до этого соседа
+    for (int i = G.offsets[start_node]; i < G.offsets[start_node+1]; i++) {     // for all neighbors of start_node
+        int neighbor_id = G.edges[i];                   // take a neighbor
+        if (neighbor_id != start_node) {                // check the loop
+            gains[neighbor_id] += G.edge_weights[i];    // gain is equal to the link weight to that neighbor
             frontier.push({gains[neighbor_id], neighbor_id});
         }
     }
 
     while (!frontier.empty() && current_weight_E < total_weight_V / 2.0) {
-        int v = frontier.top().second;           // берем первую в очереди вершину
-        frontier.pop();                          // убираем ее из очереди
+        int v = frontier.top().second;           // take the first vertex in the queue
+        frontier.pop();                          // remove it from the queue
 
-        if (part[v] == 0) continue;              // проверили что вершина еще не находится в этой части
+        if (part[v] == 0) continue;              // checked to ensure that vertex is not yet in this section
 
-        part[v] = 0;                             // перемещаем вершину в нулевую часть
-        current_weight_E += G.vertex_weights[v]; // добавляем ее вес
+        part[v] = 0;                             // move the vertex to the zero part
+        current_weight_E += G.vertex_weights[v]; // add its weight
 
         for (int i = G.offsets[v]; i < G.offsets[v+1]; i++) {
-            int neighbor_id = G.edges[i];        // берем соседа добавленной вершины
-            if (part[neighbor_id] == -1) {       // если она еще не распределена
-                gains[neighbor_id] += G.edge_weights[i];    // добавляем выигрыш
-                frontier.push({gains[neighbor_id], neighbor_id});   // добавляем его в границу
+            int neighbor_id = G.edges[i];        // take the neighbor of the added vertex
+            if (part[neighbor_id] == -1) {       // if it hasn't been allocated yet
+                gains[neighbor_id] += G.edge_weights[i];    // add the winnings
+                frontier.push({gains[neighbor_id], neighbor_id});   // add it to the boundary
             }
         }
     }
 
-    for (int i = 0; i < n; i++) {               // все что не в 0 то в 1
+    for (int i = 0; i < n; i++) {               // anything that isn't 0 is 1
         if (part[i] == -1) part[i] = 1;
     }
 }

@@ -108,7 +108,7 @@ void runVisualisation(const Graph& hostGraph, std::vector<int>& colors) {
 
     glBindBuffer(GL_ARRAY_BUFFER, colorVbo);
     glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(int), colors.data(), GL_STATIC_DRAW);
-    glVertexAttribIPointer(1, 1, GL_INT, 0, (void*)0); // Используем I для int!
+    glVertexAttribIPointer(1, 1, GL_INT, 0, (void*)0);
     glEnableVertexAttribArray(1);
 
     std::vector<unsigned int> indices;
@@ -130,7 +130,7 @@ void runVisualisation(const Graph& hostGraph, std::vector<int>& colors) {
 
     cudaDeviceSynchronize();
     while (!glfwWindowShouldClose(window)) {
-        step(deviceGraph, 40.0f, 0.0002f, 0.9f); //physics проверить что 40 достаточно
+        step(deviceGraph, 40.0f, 0.0002f, 0.9f); //physics check if 40 is enough
 
         float* d_vboPtr;
         size_t size;

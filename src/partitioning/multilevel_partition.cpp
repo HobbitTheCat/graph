@@ -6,8 +6,6 @@
 #include "partitioning/coarsening.h"
 #include "partitioning/multilevel_partition.h"
 
-#include "visual/visualisation.h"
-
 std::vector<int> project_partition(int num_vertices, const std::vector<int>& coarse_partition, const std::vector<int>& cmap) {
     std::vector<int> fine_partition(num_vertices);
     for (int v = 0; v < num_vertices; v++) {
