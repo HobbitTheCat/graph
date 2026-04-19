@@ -38,7 +38,7 @@ Link: [http://snap.stanford.edu/data/ca-HepPh.html](http://snap.stanford.edu/dat
 
 *12,008 vertices, 473,956 edges*
 
-| My Implementation (MY) | METIS Library |
+| My Implementation | METIS Library |
 |:---:|:---:|
 | <img src="./img/MY_CA-HepPh.png" width="400"> | <img src="./img/METIS_CA-HepPh.png" width="400"> |
 
@@ -81,7 +81,7 @@ METIS | Cut weight: **1745** | Part weights: 254 / 305
 ### Experimental: 4-Way Partitioning (CA-GrQc)
 *Comparison of k-way partitioning heuristics*
 
-| My Implementation (MY 4-Way) | METIS Library (4-Way) |
+| My Implementation (4-Way) | METIS Library (4-Way) |
 |:---:|:---:|
 | <img src="./img/MY_4WayCA-Gr.png" width="400"> | <img src="./img/METIS_4WayCA-Gr.png" width="400"> |
 
